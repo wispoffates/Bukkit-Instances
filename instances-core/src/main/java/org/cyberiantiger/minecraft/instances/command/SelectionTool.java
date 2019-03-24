@@ -27,7 +27,7 @@ public class SelectionTool extends AbstractCommand {
             throw new InvocationException("Using WorldEdit selection tool.");
         }
         Player player = (Player) sender;
-        instances.setSelectionTool(player.getItemInHand());
+        instances.setSelectionTool(player.getInventory().getItemInMainHand());
         return msg("Selection tool set.");
     }
 }

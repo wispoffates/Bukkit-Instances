@@ -4,10 +4,9 @@
  */
 package org.cyberiantiger.minecraft.instances.command;
 
-import java.util.Collections;
 import java.util.List;
+
 import org.bukkit.World;
-import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.cyberiantiger.minecraft.instances.Instances;
 

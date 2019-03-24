@@ -2,13 +2,12 @@ name: "Instances"
 version: "${version}-${project.build.number}"
 main: "org.cyberiantiger.minecraft.instances.Instances"
 website: "http://dev.bukkit.org/server-mods/Instances/"
+api-version: 1.13
 softdepend:
   - Multiverse-Core
   - PermissionsEx
   - Multiverse-Inventories
-  - MultiInv
   - WorldEdit
-  - WorldGuard
   - Vault
   - ProtocolLib
 commands:

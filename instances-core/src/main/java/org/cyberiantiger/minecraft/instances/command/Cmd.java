@@ -25,7 +25,7 @@ public class Cmd extends AbstractCommand {
         if (args.length != 0)
             return null;
 
-        player.setItemInHand(new ItemStack(Material.COMMAND));
+        player.getInventory().setItemInMainHand(new ItemStack(Material.COMMAND_BLOCK));
         return msg();
     }
 }

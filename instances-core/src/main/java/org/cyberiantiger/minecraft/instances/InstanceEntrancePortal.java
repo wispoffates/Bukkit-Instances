@@ -106,7 +106,7 @@ public class InstanceEntrancePortal extends Portal {
                 }
             }
             if (pair.getCreateOrEntryItem() != null) {
-                ItemStack itemInHand = player.getItemInHand();
+                ItemStack itemInHand = player.getInventory().getItemInMainHand();
                 ItemStack required = pair.getCreateOrEntryItem();
                 if (itemInHand == null || !required.isSimilar(itemInHand) || required.getAmount() > itemInHand.getAmount()) {
                     player.sendMessage(StringUtil.error("An offering of " + required.getAmount() + " " + ItemUtil.prettyName(required.getType()) + " is required."));
@@ -114,7 +114,7 @@ public class InstanceEntrancePortal extends Portal {
                     return;
                 }
                 if (required.getAmount() == itemInHand.getAmount()) {
-                    player.setItemInHand(null);
+                    player.getInventory().setItemInMainHand(null);
                 } else {
                     itemInHand.setAmount(itemInHand.getAmount() - required.getAmount());
                 }
@@ -137,7 +137,7 @@ public class InstanceEntrancePortal extends Portal {
                 }
             }
             if (pair.getEntryItem() != null) {
-                ItemStack itemInHand = player.getItemInHand();
+                ItemStack itemInHand = player.getInventory().getItemInMainHand();
                 ItemStack required = pair.getEntryItem();
                 if (itemInHand == null || !required.isSimilar(itemInHand) || required.getAmount() > itemInHand.getAmount()) {
                     player.sendMessage(StringUtil.error("An offering of " + required.getAmount() + " " + ItemUtil.prettyName(required.getType()) + " is required."));
@@ -145,7 +145,7 @@ public class InstanceEntrancePortal extends Portal {
                     return;
                 }
                 if (required.getAmount() == itemInHand.getAmount()) {
-                    player.setItemInHand(null);
+                    player.getInventory().setItemInMainHand(null);
                 } else {
                     itemInHand.setAmount(itemInHand.getAmount() - required.getAmount());
                 }

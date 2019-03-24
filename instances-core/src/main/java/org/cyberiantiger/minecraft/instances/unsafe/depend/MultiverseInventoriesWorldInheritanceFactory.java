@@ -6,7 +6,7 @@ package org.cyberiantiger.minecraft.instances.unsafe.depend;
 
 import org.cyberiantiger.minecraft.instances.util.DependencyFactory;
 import com.onarandombox.multiverseinventories.MultiverseInventories;
-import com.onarandombox.multiverseinventories.api.profile.WorldGroupProfile;
+import com.onarandombox.multiverseinventories.WorldGroup;
 import org.bukkit.plugin.Plugin;
 import org.cyberiantiger.minecraft.instances.Instances;
 
@@ -42,13 +42,13 @@ public class MultiverseInventoriesWorldInheritanceFactory extends DependencyFact
         }
 
         public void postAddInheritance(String parent, String child) {
-            for (WorldGroupProfile profile : plugin.getGroupManager().getGroupsForWorld(parent)) {
+            for (WorldGroup profile : plugin.getGroupManager().getGroupsForWorld(parent)) {
                 profile.addWorld(child);
             }
         }
 
         public void preRemoveInheritance(String parent, String child) {
-            for (WorldGroupProfile profile : plugin.getGroupManager().getGroupsForWorld(parent)) {
+            for (WorldGroup profile : plugin.getGroupManager().getGroupsForWorld(parent)) {
                 profile.removeWorld(child);
             }
         }

@@ -24,9 +24,7 @@ public class PartyList extends AbstractCommand {
             return null;
         }
 
-        StringBuilder ret = new StringBuilder();
-
-        List<Party> parties = new ArrayList(instances.getParties());
+        List<Party> parties = new ArrayList<>(instances.getParties());
         Collections.sort(parties);
 
         if (parties.isEmpty()) {

@@ -21,3 +21,9 @@ site/downloads/*
 */target/*
 */dependency-reduced-pom.xml
 /target/
+
+# VSCode
+.project
+.settings/
+.classpath
+settings.json

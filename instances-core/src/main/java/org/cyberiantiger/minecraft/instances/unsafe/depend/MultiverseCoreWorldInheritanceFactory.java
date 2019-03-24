@@ -11,7 +11,6 @@ import com.onarandombox.MultiverseCore.utils.WorldManager;
 import java.lang.reflect.Field;
 import java.util.Map;
 import java.util.logging.Level;
-import java.util.logging.Logger;
 import org.bukkit.plugin.Plugin;
 import org.cyberiantiger.minecraft.instances.Instances;
 import org.cyberiantiger.minecraft.instances.util.DependencyFactory;

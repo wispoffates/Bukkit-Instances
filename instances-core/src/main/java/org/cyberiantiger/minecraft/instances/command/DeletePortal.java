@@ -5,7 +5,6 @@
 
 package org.cyberiantiger.minecraft.instances.command;
 
-import java.util.Collections;
 import java.util.List;
 import org.bukkit.command.CommandSender;
 import org.cyberiantiger.minecraft.instances.Instances;

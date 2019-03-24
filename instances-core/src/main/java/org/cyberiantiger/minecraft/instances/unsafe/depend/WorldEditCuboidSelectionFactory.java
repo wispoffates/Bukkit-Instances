@@ -6,12 +6,12 @@ package org.cyberiantiger.minecraft.instances.unsafe.depend;
 
 import com.sk89q.worldedit.IncompleteRegionException;
 import com.sk89q.worldedit.LocalSession;
-import com.sk89q.worldedit.LocalWorld;
-import com.sk89q.worldedit.Vector;
-import com.sk89q.worldedit.bukkit.WorldEditAPI;
 import com.sk89q.worldedit.bukkit.WorldEditPlugin;
+import com.sk89q.worldedit.math.BlockVector3;
 import com.sk89q.worldedit.regions.CuboidRegion;
 import com.sk89q.worldedit.regions.Region;
+import com.sk89q.worldedit.world.World;
+
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 import org.cyberiantiger.minecraft.Cuboid;
@@ -44,22 +44,20 @@ public class WorldEditCuboidSelectionFactory extends DependencyFactory<Instances
     public static class WorldEditCuboidSelection implements CuboidSelection {
 
         private final WorldEditPlugin plugin;
-        private final WorldEditAPI api;
 
         public WorldEditCuboidSelection(Plugin plugin) {
             this.plugin = (WorldEditPlugin) plugin;
-            this.api = new WorldEditAPI(this.plugin);
         }
 
         public Cuboid getCurrentSelection(Player player) throws InvocationException {
-            LocalSession session = api.getSession(player);
-            LocalWorld world = session.getSelectionWorld();
+            LocalSession session = this.plugin.getSession(player);
+            World world = session.getSelectionWorld();
             try {
                 Region selection = session.getSelection(world);
                 if (selection instanceof CuboidRegion) {
                     CuboidRegion cubeSelection = (CuboidRegion) selection;
-                    Vector pos1 = cubeSelection.getPos1();
-                    Vector pos2 = cubeSelection.getPos2();
+                    BlockVector3 pos1 = cubeSelection.getPos1();
+                    BlockVector3 pos2 = cubeSelection.getPos2();
                     return new Cuboid(world.getName(), pos1.getBlockX(), pos2.getBlockX(), pos1.getBlockY(), pos2.getBlockY(), pos1.getBlockZ(), pos2.getBlockZ());
                 } else {
                     throw new InvocationException("You can only create portals for cuboid regions.");

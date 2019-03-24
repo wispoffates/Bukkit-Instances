@@ -201,7 +201,7 @@ public class ProtocolLibPacketHooksFactory extends DependencyFactory<Instances, 
             @Override
             public void run() {
                 Block b = player.getWorld().getBlockAt(x, y, z);
-                if (b.getType() == Material.COMMAND && checkAccess()) {
+                if (b.getType() == Material.COMMAND_BLOCK && checkAccess()) {
                     // Set command.
                     NBTTools nbtTools = instances.getNBTTools();
                     CompoundTag e = nbtTools.readTileEntity(b);

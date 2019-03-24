@@ -5,9 +5,6 @@
 package org.cyberiantiger.minecraft.instances;
 
 import java.io.BufferedReader;
-import java.util.logging.Level;
-import org.bukkit.configuration.ConfigurationSection;
-import org.cyberiantiger.minecraft.instances.command.SenderType;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -17,17 +14,18 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
+import java.util.logging.Level;
+
 import org.bukkit.Difficulty;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.command.CommandSender;
+import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -42,7 +40,6 @@ import org.bukkit.event.player.PlayerRespawnEvent;
 import org.bukkit.event.player.PlayerTeleportEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
-import org.bukkit.scheduler.BukkitTask;
 import org.cyberiantiger.minecraft.Coord;
 import org.cyberiantiger.minecraft.Cuboid;
 import org.cyberiantiger.minecraft.Facing;
@@ -73,30 +70,28 @@ import org.cyberiantiger.minecraft.instances.command.PortalList;
 import org.cyberiantiger.minecraft.instances.command.Reload;
 import org.cyberiantiger.minecraft.instances.command.Save;
 import org.cyberiantiger.minecraft.instances.command.SelectionTool;
+import org.cyberiantiger.minecraft.instances.command.SenderType;
 import org.cyberiantiger.minecraft.instances.command.SetDestination;
 import org.cyberiantiger.minecraft.instances.command.SetEntrance;
 import org.cyberiantiger.minecraft.instances.command.SetHome;
 import org.cyberiantiger.minecraft.instances.command.SetSpawn;
 import org.cyberiantiger.minecraft.instances.command.Spawn;
 import org.cyberiantiger.minecraft.instances.command.Spawner;
-import org.cyberiantiger.minecraft.unsafe.InstanceTools;
-import org.cyberiantiger.minecraft.unsafe.CBShim;
-import org.cyberiantiger.minecraft.instances.unsafe.depend.PacketHooks;
 import org.cyberiantiger.minecraft.instances.unsafe.depend.Bank;
-import org.cyberiantiger.minecraft.instances.unsafe.depend.WorldInheritance;
 import org.cyberiantiger.minecraft.instances.unsafe.depend.CuboidSelection;
 import org.cyberiantiger.minecraft.instances.unsafe.depend.InstancesCuboidSelectionFactory;
-import org.cyberiantiger.minecraft.instances.unsafe.depend.MultiInvWorldInheritanceFactory;
 import org.cyberiantiger.minecraft.instances.unsafe.depend.MultiverseCoreWorldInheritanceFactory;
 import org.cyberiantiger.minecraft.instances.unsafe.depend.MultiverseInventoriesWorldInheritanceFactory;
-import org.cyberiantiger.minecraft.instances.unsafe.depend.PEXWorldInheritanceFactory;
+import org.cyberiantiger.minecraft.instances.unsafe.depend.PacketHooks;
 import org.cyberiantiger.minecraft.instances.unsafe.depend.ProtocolLibPacketHooksFactory;
 import org.cyberiantiger.minecraft.instances.unsafe.depend.VaultBankFactory;
 import org.cyberiantiger.minecraft.instances.unsafe.depend.WorldEditCuboidSelectionFactory;
-import org.cyberiantiger.minecraft.instances.unsafe.depend.WorldGuardWorldInheritanceFactory;
+import org.cyberiantiger.minecraft.instances.unsafe.depend.WorldInheritance;
 import org.cyberiantiger.minecraft.instances.util.DependencyFactory;
 import org.cyberiantiger.minecraft.instances.util.DependencyUtil;
 import org.cyberiantiger.minecraft.instances.util.StringUtil;
+import org.cyberiantiger.minecraft.unsafe.CBShim;
+import org.cyberiantiger.minecraft.unsafe.InstanceTools;
 import org.cyberiantiger.minecraft.unsafe.NBTTools;
 
 /**
@@ -107,14 +102,11 @@ public class Instances extends JavaPlugin implements Listener {
 
     private static final String[] DEFAULT_HOOKS = new String[] {
         "Instances",
-        "MultiInv",
         "Multiverse-Core",
         "Multiverse-Inventories",
-        "PermissionsEx",
         "ProtocolLib",
         "Vault",
-        "WorldEdit",
-        "WorldGuard",
+        "WorldEdit"
     };
     public static final Charset CHARSET = Charset.forName("UTF-8");
     private String[] motd;
@@ -492,9 +484,6 @@ public class Instances extends JavaPlugin implements Listener {
         List<DependencyFactory<?, WorldInheritance>> worldInheritanceFactories = new ArrayList<DependencyFactory<?,WorldInheritance>>();
         worldInheritanceFactories.add(new MultiverseCoreWorldInheritanceFactory(this));
         worldInheritanceFactories.add(new MultiverseInventoriesWorldInheritanceFactory(this));
-        worldInheritanceFactories.add(new MultiInvWorldInheritanceFactory(this));
-        worldInheritanceFactories.add(new PEXWorldInheritanceFactory(this));
-        worldInheritanceFactories.add(new WorldGuardWorldInheritanceFactory(this));
         this.worldInheritance = DependencyUtil.merge(getLogger(), WorldInheritance.class, worldInheritanceFactories, hooks);
         List<DependencyFactory<?,Bank>> bankFactories = new ArrayList<DependencyFactory<?,Bank>>();
         bankFactories.add(new VaultBankFactory(this));
@@ -887,7 +876,7 @@ public class Instances extends JavaPlugin implements Listener {
     public void onClick(PlayerInteractEvent e) {
         if (getCuboidSelection().isNative()) {
             Player p = e.getPlayer();
-            if (getSelectionTool() != null && getSelectionTool().equals(p.getItemInHand()) && p.hasPermission("instances.portal.create")) {
+            if (getSelectionTool() != null && getSelectionTool().equals(p.getInventory().getItemInMainHand()) && p.hasPermission("instances.portal.create")) {
                 if (e.getAction() == Action.LEFT_CLICK_BLOCK) {
                     Block b = e.getClickedBlock();
                     Location l = b.getLocation();
@@ -944,7 +933,7 @@ public class Instances extends JavaPlugin implements Listener {
     }
 
     private void checkInstances(final Party party) {
-        List<Instance> instances = new LinkedList(party.getInstances());
+        List<Instance> instances = new LinkedList<>(party.getInstances());
         for (Player p : party.getMembers()) {
             Instance i = party.getInstance(p);
             if (i != null) {
@@ -954,7 +943,6 @@ public class Instances extends JavaPlugin implements Listener {
         }
         for (Instance i : instances) {
             if (i.getPortal().getUnloadTime() > 0) {
-                BukkitTask task = i.getDeleteTask();
                 if (i.getDeleteTask() == null) {
                     final Instance ii = i;
                     i.setDeleteTask(getServer().getScheduler().runTaskLater(this, new Runnable() {

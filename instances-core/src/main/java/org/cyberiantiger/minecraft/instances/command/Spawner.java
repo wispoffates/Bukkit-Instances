@@ -132,7 +132,7 @@ public class Spawner extends AbstractCommand {
                 throw new InvocationException(nearest.getType().name() + " cannot be spawned");
             }
             b = nearest.getLocation().getBlock();
-            b.setType(Material.MOB_SPAWNER);
+            b.setType(Material.SPAWNER);
             CompoundTag entity = nbtTools.readEntity(nearest);
             entity.remove("Pos");
             entity.remove("Motion");
@@ -148,7 +148,7 @@ public class Spawner extends AbstractCommand {
         } else {
             b = player.getTargetBlock((Set<Material>)null, 200);
         }
-        if (b.getType() != Material.MOB_SPAWNER) {
+        if (b.getType() != Material.SPAWNER) {
             throw new InvocationException("You are not looking at a mob spawner.");
         }
 
